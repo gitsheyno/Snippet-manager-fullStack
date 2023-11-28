@@ -28,26 +28,32 @@ export async function createSnippet(
   formData: FormData
 ) {
   //   return { message: "Title Must be longer" };
-  //-------------------------------<< Validate Inputs >>-------------------------------
-  const title = formData.get("title") as string;
-  const code = formData.get("code") as string;
+  try {
+    const title = formData.get("title") as string;
+    const code = formData.get("code") as string;
+    console.log(code);
 
-  if (typeof title !== "string" || title.length < 3) {
-    return { message: "title must be longer" };
-  }
-  if (typeof code !== "string" || title.length < 10) {
-    return { message: "code must be longer" };
-  }
-  //-------------------------------<< Create New Record in DB >>-------------------------------
-  const snippet = await db.snipet.create({
-    data: {
-      title,
-      code,
-    },
-  });
-  console.log(snippet);
+    if (typeof title !== "string" || title.length < 3) {
+      return { message: "title must be longer" };
+    }
+    if (typeof code !== "string" || code.length < 10) {
+      return { message: "code must be longer" };
+    }
+    await db.snipet.create({
+      data: {
+        title,
+        code,
+      },
+    });
 
-  //-------------------------------<< Redirect to Root >>-------------------------------
+    // throw new Error("Failed to save to database...!");
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return { message: err.message };
+    } else {
+      return { message: "Something Went Wrong" };
+    }
+  }
 
   redirect("/");
 }
