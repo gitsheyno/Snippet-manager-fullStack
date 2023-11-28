@@ -1,7 +1,8 @@
 "use server";
-
+import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { redirect } from "next/navigation";
+
 export async function editSnippet(id: number, code: string) {
   await db.snipet.update({
     where: {
@@ -10,6 +11,7 @@ export async function editSnippet(id: number, code: string) {
     data: { code },
   });
 
+  revalidatePath(`/snippets/${id}`);
   redirect(`/snippets/${id}`);
 }
 
@@ -20,6 +22,7 @@ export async function deleteSnippet(id: number) {
     },
   });
 
+  revalidatePath("/");
   redirect(`/`);
 }
 
@@ -54,6 +57,6 @@ export async function createSnippet(
       return { message: "Something Went Wrong" };
     }
   }
-
+  revalidatePath("/");
   redirect("/");
 }
