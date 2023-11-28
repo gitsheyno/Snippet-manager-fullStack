@@ -31,7 +31,9 @@ export default async function SnippetPage(params: SnippetPageParam) {
           >
             Edit
           </Link>
-          <button className="p-2 border rounded">Delete</button>
+          <button className="p-2 border rounded">
+            <Link href={`/snippets/${snippet.id}/delete`}>Delete</Link>
+          </button>
         </div>
       </div>
       <pre className="p-3 border rounded bg-gray-200 border-gray-200">
